@@ -75,7 +75,7 @@ var _ = { };
         }
       }
     }else {
-      for (each in collection) {
+      for (var each in collection) {
         if (iterator(collection[each])) {
           newArray.push(collection[each]);
         }
@@ -86,9 +86,17 @@ var _ = { };
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, iterator) {
-    // TIP: see if you can re-use _.select() here, without simply
+    // TIP: see if you can re-use _.select() here, without simply   // this really means ".filter()"
     // copying code in and modifying it
-  };
+    var filteredArray = _.filter(collection, iterator);
+    console.log("filtered array is " + filteredArray);
+    var diff = function (i) {
+      return !(filteredArray.indexOf(i) != -1);
+      }
+    var result = _.filter(collection, diff);
+    console.log ("final result is " + result);  
+    return result; 
+    }
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
