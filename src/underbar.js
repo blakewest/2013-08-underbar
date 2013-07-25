@@ -46,6 +46,15 @@ var _ = { };
   // Call iterator(value, key, collection) for each element of collection.
   // Accepts both arrays and objects.
   _.each = function(collection, iterator) {
+    if (Array.isArray(collection)) {
+      for (var i = 0; i < collection.length; i++) {
+        iterator(collection[i], i, collection);
+      }
+    }else {
+      for (key in collection) {
+        iterator(collection[key], key, collection);
+      }
+    }
   };
 
   // Returns the index at which value can be found in the array, or -1 if value
@@ -58,6 +67,21 @@ var _ = { };
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, iterator) {
+    var newArray = [];
+    if (Array.isArray(collection)) {
+      for (var i = 0; i < collection.length; i++) {
+        if (iterator(collection[i])) {
+          newArray.push(collection[i]);
+        }
+      }
+    }else {
+      for (each in collection) {
+        if (iterator(collection[each])) {
+          newArray.push(collection[each]);
+        }
+      }
+    }
+    return newArray;
   };
 
   // Return all elements of an array that don't pass a truth test.
@@ -68,6 +92,13 @@ var _ = { };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
+     var newArray = [];
+    for (var i = 0; i < array.length; i++) {
+      if (newArray.indexOf(array[i]) == -1) {
+        newArray.push(array[i]);
+      }
+    }
+    return newArray;
   };
 
 
@@ -76,6 +107,11 @@ var _ = { };
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
+    var newArray = [];
+    for (var i = 0; i < array.length; i++) {
+      newArray.push(iterator(array[i]));
+    }
+    return newArray;
   };
 
   /*
