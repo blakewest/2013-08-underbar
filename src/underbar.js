@@ -89,12 +89,10 @@ var _ = { };
     // TIP: see if you can re-use _.select() here, without simply   // this really means ".filter()"
     // copying code in and modifying it
     var filteredArray = _.filter(collection, iterator);
-    console.log("filtered array is " + filteredArray);
     var diff = function (i) {
-      return !(filteredArray.indexOf(i) != -1);
+      return !(filteredArray.indexOf(i) != -1);     //determines if an item is in the filtered array
       }
-    var result = _.filter(collection, diff);
-    console.log ("final result is " + result);  
+    var result = _.filter(collection, diff);        //I'm filtering the collection based on whether the item is in the filtered array.
     return result; 
     }
 
@@ -142,6 +140,18 @@ var _ = { };
 
   // Calls the method named by methodName on each value in the list.
   _.invoke = function(list, methodName, args) {
+    var result = [];
+    //var funcName = methodName;
+    for (var i = 0; i < list.length; i++) {
+      if (typeof methodName == "string") {
+      result.push(list[i][methodName](args));
+      }
+      else {
+        console.log("this list item is " + list[i])
+        result.push(methodName(list[i]));
+      }
+    }
+    return result;
   };
 
   // Reduces an array or object to a single value by repetitively calling
@@ -158,6 +168,18 @@ var _ = { };
   //   }, 0); // should be 6
   //
   _.reduce = function(collection, iterator, initialValue) {
+    initialValue = typeof initialValue !== 'undefined' ? initialValue : 0;
+    if (Array.isArray(collection)) {
+      for (var i = 0; i < collection.length; i++) {
+      initialValue = iterator(initialValue, collection[i]);
+    }
+    }else {
+      for (var key in collection) {
+        initialValue = iterator(initialValue, collection[key]);
+      }
+    }
+    return initialValue;
+    
   };
 
   // Determine if the array or object contains a given value (using `===`).
@@ -176,12 +198,42 @@ var _ = { };
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    if (collection.length === 0) {
+      return true;
+    }
+    if (iterator === undefined) {
+      return true;
+    }
+    return _.reduce(collection, function(wasFound, item) {
+      if (!wasFound) {
+        return false;
+      }else if(iterator(item)){
+        return true;
+      }else{
+        return false;
+      }
+    }, true)
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    if (collection.length === 0) {
+      return false;
+    }
+
+    iterator = iterator !== undefined ? iterator : function(item){return item;};
+  
+    return _.reduce(collection, function(wasFound, item) {
+      if (wasFound) {
+        return true;
+      }else if(iterator(item)) {
+        return true;
+      }else{
+        return false;
+      }
+    }, false)
   };
 
 
