@@ -198,16 +198,16 @@ var _ = { };
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
-    if (collection.length === 0) {
+    if (collection.length === 0) {                      //handling case of empty array
       return true;
     }
-    if (iterator === undefined) {
+    if (iterator === undefined) {                       //setting default for no iterator
       return true;
     }
-    return _.reduce(collection, function(wasFound, item) {
-      if (!wasFound) {
+    return _.reduce(collection, function(wasFound, item) {    //this function must do every iteration. You can't just return out of it
+      if (!wasFound) {                                        //if anything isn't found, this kills any future chance of returning true.
         return false;
-      }else if(iterator(item)){
+      }else if(iterator(item)){                               
         return true;
       }else{
         return false;
@@ -218,14 +218,14 @@ var _ = { };
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
-    // TIP: There's a very clever way to re-use every() here.
+    // TIP: There's a very clever way to re-use every() here. 
     if (collection.length === 0) {
       return false;
     }
 
-    iterator = iterator !== undefined ? iterator : function(item){return item;};
-  
-    return _.reduce(collection, function(wasFound, item) {
+    iterator = iterator !== undefined ? iterator : function(item){return item;};  //setting default iterator function
+
+    return _.reduce(collection, function(wasFound, item) {       //this is the same as 'every' except the first 'if' is flipped. try to be clever later and refactor this
       if (wasFound) {
         return true;
       }else if(iterator(item)) {
@@ -256,11 +256,26 @@ var _ = { };
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    for (var i = 1; i < arguments.length; i++) {
+      for (var each in arguments[i]) {
+        obj[each] = arguments[i][each];
+      }  
+    }
+    
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    for (var i = 1; i < arguments.length; i++) {
+      for (var each in arguments[i]) {
+        if (!(each in obj)) {
+          obj[each] = arguments[i][each];
+        }
+      }
+    }
+    return obj;
   };
 
 
@@ -301,6 +316,9 @@ var _ = { };
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    //var result = func.apply(this, arguments);
+    //var funcString = func.toString
+    
   };
 
   // Delays a function for the given number of milliseconds, and then calls
