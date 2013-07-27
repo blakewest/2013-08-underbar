@@ -316,9 +316,22 @@ var _ = { };
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
-    //var result = func.apply(this, arguments);
-    //var funcString = func.toString
-    
+    var result;
+    var storedFunc;
+    var storedParameters;
+
+    return function() {
+      if (storedFunc === func && storedParameters === arguments) {
+        return result;
+      }else {
+        storedFunc = func;
+        storedParameters = arguments;
+        result = func.apply(this, arguments);
+        return result;
+      }
+
+    }
+
   };
 
   // Delays a function for the given number of milliseconds, and then calls
