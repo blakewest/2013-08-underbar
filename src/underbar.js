@@ -15,7 +15,7 @@ var _ = { };
 
   // Return an array of the first n elements of an array. If n is undefined,
   // return just the first element.
-  _.first = function(array, n) {
+  _.first = function(array, n) {             //look up other methods so you don't have to use a new array.
     var newArray = [];
     if (n >= 0) {
       for(var i = 0; i < n; i++) {
@@ -66,7 +66,7 @@ var _ = { };
   };
 
   // Return all elements of an array that pass a truth test.
-  _.filter = function(collection, iterator) {
+  _.filter = function(collection, iterator) {              //refactor with each
     var newArray = [];
     if (Array.isArray(collection)) {
       for (var i = 0; i < collection.length; i++) {
@@ -140,19 +140,20 @@ var _ = { };
 
   // Calls the method named by methodName on each value in the list.
   _.invoke = function(list, methodName, args) {
-    var result = [];
-    //var funcName = methodName;
-    for (var i = 0; i < list.length; i++) {
-      if (typeof methodName == "string") {
-      result.push(list[i][methodName](args));
-      }
-      else {
-        console.log("this list item is " + list[i])
-        result.push(methodName(list[i]));
-      }
+    var func;
+    if (typeof methodName === 'string') {       
+      func = list[methodName];
+    } else {
+      func = methodName;
     }
+
+    var result = [];
+    for (var i = 0; i < list.length; i++) {
+      result.push(func.apply(list[i], args));
+    };
     return result;
-  };
+  }
+     
 
   // Reduces an array or object to a single value by repetitively calling
   // iterator(previousValue, item) for each item. previousValue should be
@@ -167,7 +168,7 @@ var _ = { };
   //     return total + number;
   //   }, 0); // should be 6
   //
-  _.reduce = function(collection, iterator, initialValue) {
+  _.reduce = function(collection, iterator, initialValue) {                   //use each
     initialValue = typeof initialValue !== 'undefined' ? initialValue : 0;
     if (Array.isArray(collection)) {
       for (var i = 0; i < collection.length; i++) {
@@ -316,7 +317,7 @@ var _ = { };
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
-    var result;
+    var result
     var storedFunc;
     var storedParameters;
 
@@ -379,7 +380,7 @@ var _ = { };
   // The new array should contain all elements of the multidimensional array.
   //
   // Hint: Use Array.isArray to check if something is an array
-  _.flatten = function(nestedArray, result) {
+  _.flatten = function(nestedArray, result) {        //do this one.
   };
 
   // Takes an arbitrary number of arrays and produces an array that contains
